@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>닷 펫 · Dot Pet</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f0fc;color:#281840;font:16px system-ui,sans-serif}main{max-width:900px;margin:auto;padding:48px 24px}small{color:#7556a8;letter-spacing:.15em}h1{font-size:48px;margin:12px 0}p{line-height:1.7;color:#6c607e}.stage{margin:28px 0;background:white;border:1px solid #e6dcf5;border-radius:32px;height:340px;display:grid;place-items:center;position:relative}.pet{width:192px;height:208px;background-image:url('pets/dot-pet/spritesheet.webp');background-repeat:no-repeat;image-rendering:auto}.caption{position:absolute;bottom:18px;color:#78678b;font-size:13px}.buttons{display:flex;gap:8px;flex-wrap:wrap}button{border:1px solid #dfd1ee;border-radius:24px;background:white;color:#51347b;padding:11px 17px;cursor:pointer;font:inherit}button[aria-pressed=true]{background:#7946d8;border-color:#7946d8;color:white}button:focus-visible{outline:3px solid #bda0ef;outline-offset:3px}.toolbar{display:flex;align-items:center;gap:16px;margin:24px 0}a{color:#7040c8}footer{margin-top:36px;border-top:1px solid #dfd1ee;padding-top:18px;font-size:13px}
+</style>
+<main><small>SURVEYDOT · CODEX COMPANION</small><h1>안녕, 나는 닷.</h1><p>작은 체크리스트와 함께, 오늘의 일을 한 걸음씩.<br>버튼을 누르거나 ‘시선 따라가기’에서 마우스를 움직여 보세요.</p>
+<div class="stage" id="stage"><div class="pet" id="pet" role="img" aria-label="보라색 닷 펫"></div><span class="caption" id="caption">기본</span></div>
+<div class="buttons" id="buttons"></div><div class="toolbar"><button id="pause">일시정지</button><label><input type="checkbox" id="dark"> 어두운 배경</label></div>
+<p>이 페이지는 설치 전 미리보기입니다. 실제 앱의 상태 전환·재생 시점과는 다를 수 있습니다.</p><footer><a href="README.md">설치 안내</a> · <a href="https://github.com/qkrwlgus89/dot-codex-pet">GitHub</a></footer></main>
+<script>
+const states=[['기본',0,[280,110,110,140,140,320]],['오른쪽 이동',1,[120,120,120,120,120,120,120,220]],['왼쪽 이동',2,[120,120,120,120,120,120,120,220]],['인사',3,[140,140,140,280]],['점프',4,[140,140,140,140,280]],['실패',5,[140,140,140,140,140,140,140,240]],['입력 대기',6,[150,150,150,150,150,260]],['작업 중',7,[120,120,120,120,120,220]],['검토',8,[150,150,150,150,150,280]],['시선 따라가기',9,[]]];
+const pet=document.getElementById('pet'),stage=document.getElementById('stage'),caption=document.getElementById('caption'),pause=document.getElementById('pause');let selected=0,frame=0,timer,paused=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function draw(row,col){pet.style.backgroundPosition=`${-192*col}px ${-208*row}px`}
+function tick(){clearTimeout(timer);const s=states[selected];if(selected===9)return;draw(s[1],frame);if(!paused)timer=setTimeout(()=>{frame=(frame+1)%s[2].length;tick()},s[2][frame]);}
+states.forEach((s,i)=>{const b=document.createElement('button');b.textContent=s[0];b.setAttribute('aria-pressed',i===0);b.onclick=()=>{selected=i;frame=0;caption.textContent=s[0];if(i===9)draw(0,0);document.querySelectorAll('#buttons button').forEach((x,k)=>x.setAttribute('aria-pressed',k===i));tick()};document.getElementById('buttons').append(b)});
+pause.onclick=()=>{paused=!paused;pause.textContent=paused?'재생':'일시정지';tick()};pause.textContent=paused?'재생':'일시정지';
+stage.onpointermove=e=>{if(selected!==9||paused)return;const r=pet.getBoundingClientRect(),dx=e.clientX-r.left-r.width/2,dy=e.clientY-r.top-r.height/2;if(Math.hypot(dx,dy)<30){draw(0,0);return}const n=Math.round((Math.atan2(dx,-dy)+Math.PI*2)%(Math.PI*2)/(Math.PI/8))%16;draw(9+Math.floor(n/8),n%8)};stage.onpointerleave=()=>{if(selected===9)draw(0,0)};document.getElementById('dark').onchange=e=>stage.style.background=e.target.checked?'#21172e':'white';tick();
+</script></html>

@@ -1,0 +1,7 @@
+{
+  "id": "dot-pet",
+  "displayName": "닷 펫",
+  "description": "체크리스트와 함께 일하는 보라색 닷 펫",
+  "spriteVersionNumber": 2,
+  "spritesheetPath": "spritesheet.webp"
+}

@@ -1,0 +1,7 @@
+{
+  "decision":"accept",
+  "severity":"minor",
+  "reviewed_by":"parent",
+  "failed_checks":"Intermediate vertical blind disagreements and three continuity metric warnings; no cardinal failures.",
+  "evidence":"Labeled ordered sheet shows face moving high-to-right-to-low-to-left-to-high with stable feet and checklist hand. White marks in dark oval eyes are highlights, so face placement carries direction. Intermediate differences are subtle, not reversed. Row boundaries change face position while preserving body scale and baseline."
+}
